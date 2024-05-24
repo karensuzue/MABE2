@@ -6,6 +6,8 @@ SEED_OFFSET=10000
 JOB_TIME=72:00:00
 JOB_MEM=16G
 
+current_date=$(date +"%Y-%m-%d")
+
 # SCRATCH_EXP_DIR=/mnt/scratch/lalejini/data-public/${PROJECT_NAME}
 # REPO_DIR=/mnt/home/lalejini/devo_ws/${PROJECT_NAME}
 # HOME_EXP_DIR=${REPO_DIR}/experiments
