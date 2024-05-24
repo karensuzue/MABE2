@@ -19,22 +19,19 @@ default_num_replicates = 100 # How many runs PER conditions
 default_job_time_request = "148:00:00" # TODO: Determine job time 
 default_job_mem_request = "8G" # TODO: Determine memory
 
-home_dir = "/Users/HP/Documents/GitHub/MABE2/runs/GPTP2024"
 job_name = "aged_lexicase"
 executable = "MABE2"
-exec_dir = home_dir
+# exec_dir = home_dir
 env = "aged_lexicase" # Conda environment name
 
-repo_dir = os.path.join(home_dir, datetime.now().strftime("%Y-%m-%d"))
-data_dir = os.path.join(repo_dir, "data")
-job_dir = os.path.join(data_dir, "jobs")
-print(job_dir)
+# default_repo_dir = os.path.join(home_dir, datetime.now().strftime("%Y-%m-%d"))
+# default_data_dir = os.path.join(repo_dir, "data")
 
 # Path from RUN_DIR
-config_dir = home_dir # Doesn't need to be created, it is the GPTP2024 folder
+# config_dir = home_dir # Doesn't need to be created, it is the GPTP2024 folder
 
 # TODO: Are folders being created anywhere else?
-os.makedirs(job_dir, exist_ok=True)
+# os.makedirs(job_dir, exist_ok=True)
 
 base_script_filename = "./base-script.txt"
 
@@ -48,7 +45,7 @@ combos = CombinationCollector()
 
 fixed_parameters = {
     # "pop_size":"1000",
-    "num_gens":"1000000",
+    "num_gens":"2000000",
     # "num_vals":"500",
     "print_step":"1000000",
     "inject_step":"100",
@@ -103,10 +100,11 @@ combos.add_val(
 
 def main():
     parser = argparse.ArgumentParser(description="Run submission script.")
-    # parser.add_argument("--data_dir", type=str, help="Where is the output directory for phase one of each run?")
-    # parser.add_argument("--config_dir", type=str, help="Where is the configuration directory for experiment?")
-    # parser.add_argument("--repo_dir", type=str, help="Where is the repository for this experiment?")
-    # parser.add_argument("--job_dir", type=str, default=None, help="Where to output these job files? If none, put in 'jobs' directory inside of the data_dir")
+    parser.add_argument("--data_dir", type=str, help="Where is the output directory for phase one of each run?")
+    parser.add_argument("--config_dir", type=str, help="Where is the configuration directory for experiment?")
+    parser.add_argument("--repo_dir", type=str, help="Where is the repository for this experiment?")
+    parser.add_argument("--exec_dir", type=str, help="Where is the directory for the executable?")
+    parser.add_argument("--job_dir", type=str, default=None, help="Where to output these job files? If none, put in 'jobs' directory inside of the data_dir")
     parser.add_argument("--replicates", type=int, default=default_num_replicates, help="How many replicates should we run of each condition?")
     parser.add_argument("--seed_offset", type=int, default=default_seed_offset, help="Value to offset random number seeds by")
     parser.add_argument("--account", type=str, default=default_account, help="Value to use for the slurm ACCOUNT")
@@ -116,10 +114,11 @@ def main():
 
     # Load in command line arguments
     args = parser.parse_args()
-    # data_dir = args.data_dir
-    # config_dir = args.config_dir
-    # job_dir = args.job_dir
-    # repo_dir = args.repo_dir
+    data_dir = args.data_dir
+    config_dir = args.config_dir
+    job_dir = args.job_dir
+    repo_dir = args.repo_dir
+    exec_dir = args.exec_dir
     num_replicates = args.replicates
     hpc_account = args.account
     seed_offset = args.seed_offset
@@ -148,8 +147,8 @@ def main():
     print(f' - Seed offset: {seed_offset}')
 
     # If no job_dir provided, default to data_dir/jobs
-    # if job_dir == None:
-    #    job_dir = os.path.join(data_dir, "jobs")
+    if job_dir == None:
+        job_dir = os.path.join(data_dir, "jobs")
 
     # Create job file for each condition
     cur_job_id = 0 
@@ -176,6 +175,7 @@ def main():
         # Replace base script
         file_str = base_sub_script
         file_str = file_str.replace("<<ENV>>", env)
+
         file_str = file_str.replace("<<CONFIG_DIR>>", config_dir)
         file_str = file_str.replace("<<REPO_DIR>>", repo_dir)
         file_str = file_str.replace("<<DATA_DIR>>", data_dir)
@@ -193,7 +193,7 @@ def main():
         ###################################################################
         # Replace path to run directories
         file_str = file_str.replace("<<RUN_DIR>>", \
-            os.path.join("../../", f'{filename_prefix}_'+'${SEED}'))
+            os.path.join(data_dir, f'{filename_prefix}_'+'${SEED}'))
             # Use same naming convention for RUN_DIR and script files
         # This doesn't create folders, they're created when we submit the 
 
@@ -281,6 +281,7 @@ def main():
         print(f" - Active: " + ", ".join([f"RUN_C{cond_i}_{array_id_to_seed[array_id]}" for array_id in active_array_ids]))
         print(f" - Inactive: " + ", ".join([f"RUN_C{cond_i}_{array_id_to_seed[array_id]}" for array_id in inactive_array_ids]))
 
+        # Make folders
         cur_job_dir = job_dir if args.runs_per_subdir == -1 else os.path.join(job_dir, f"set-{cur_run_subdir_id}")
         if len(active_array_ids): # If any of array ids are active
             utils.mkdir_p(cur_job_dir)

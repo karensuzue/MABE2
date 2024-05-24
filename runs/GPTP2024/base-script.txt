@@ -2,19 +2,20 @@
 
 # This is a template for generating submissions scripts - 1 per condition set
 
-# GPTP2024 [CONFIG_DIR]
+# TODO: Fix this tree
+# GPTP2024 [CONFIG_DIR] [REPO_DIR]
 # ├── config_file1.mabe
 # ├── config_file2.mabe
+# MABE
 # ├── ... (more .mabe files)
-# └── /YYYY_MM_DD_HH_MM [REPO_DIR]
-#     └── data [DATA_DIR]
-#         ├── jobs [JOB_DIR]
-#         │   ├── set1
-#         │   │   ├── job1.sh
-#         │   │   └── job2.sh
-#         │   ├── set2
-#         │   └── ... (other subdirectories containing submission scripts)
-#         ├── Conditions_SEED1 [RUN_DIR]
+# └── /YYYY_MM_DD_HH_MM [DATA_DIR]
+#     ├── jobs [JOB_DIR]
+#     │   ├── set1
+#     │   │   ├── job1.sh
+#     │   │   └── job2.sh
+#     │   ├── set2
+#     │   └── ... (other subdirectories containing submission scripts)
+#     ├── Conditions_SEED1 [RUN_DIR]
 #         │   ├── config_file1.mabe
 #         │   ├── config_file2.mabe
 #         │   ├── MABE
@@ -49,23 +50,21 @@ conda activate ${ENV}
 JOB_SEED_OFFSET=<<JOB_SEED_OFFSET>>
 SEED=$((JOB_SEED_OFFSET + SLURM_ARRAY_TASK_ID - 1))
 
-EXEC=<<EXEC>> # Executable ONLY
-EXEC_DIR=<<EXEC_DIR>> # Path leading to executable, from RUN_DIR
+EXEC=<<EXEC>> 
+EXEC_DIR=<<EXEC_DIR>> 
 
-CONFIG_DIR=<<CONFIG_DIR>> # Path leading to config files, also from RUN_DIR
-
-# Assume the following folders have been created
+CONFIG_DIR=<<CONFIG_DIR>> 
 REPO_DIR=<<REPO_DIR>>
 DATA_DIR=<<DATA_DIR>>
 
-RUN_DIR=<<RUN_DIR>> 
+RUN_DIR=<<RUN_DIR>>  # run dir is CONFIG_DIR or REPO_DIR / DATA_DIR/
 
 # Make new run folder
 mkdir -p ${RUN_DIR}
 cd ${RUN_DIR}
 
 # Copy .mabe files to run folder
-cp ${CONFIG_DIR}/*.mabe . # change this to .mabe
+cp ${CONFIG_DIR}/*.mabe . 
 cp ${EXEC_DIR}/${EXEC} .
 
 ######## Run experiment ########

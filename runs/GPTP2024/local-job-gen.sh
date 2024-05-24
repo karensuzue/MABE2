@@ -1,41 +1,26 @@
 #!/usr/bin/env bash
 
-# GPTP2024 [CONFIG_DIR]
-# ├── config_file1.mabe
-# ├── config_file2.mabe
-# ├── ... (more .mabe files)
-# └── /YYYY_MM_DD [REPO_DIR]
-#     └── data [DATA_DIR]
-#         ├── jobs [JOB_DIR]
-#         │   ├── set1
-#         │   │   ├── job1.sh
-#         │   │   └── job2.sh
-#         │   ├── set2
-#         │   └── ... (other subdirectories containing submission scripts)
-#         ├── Conditions_SEED1 [RUN_DIR]
-#         │   ├── config_file1.mabe
-#         │   ├── config_file2.mabe
-#         │   ├── MABE
-#         │   └── ... (other run files)
-#         ├── Conditions_SEED2 [RUN_DIR]
-#         │   ├── config_file1.mabe
-#         │   ├── config_file2.mabe
-#         │   ├── MABE
-#         │   └── ... (other run files)
-#         └── ... (more run directories) [RUN_DIR]
-
 REPLICATES=20
 ACCOUNT=suzuekar
 SEED_OFFSET=10000
 JOB_TIME=72:00:00
 JOB_MEM=16G
 
+current_date=$(date +"%Y-%m-%d")
+
 # SCRATCH_EXP_DIR=./test/data/${PROJECT_NAME}
 # REPO_DIR=/Users/lalejina/devo_ws/${PROJECT_NAME}
 # HOME_EXP_DIR=${REPO_DIR}/experiments
+
+REPO_DIR=/mnt/c/Users/HP/Documents/GitHub/MABE2/runs/GPTP2024
+CONFIG_DIR=${REPO_DIR}
+EXEC_DIR=${REPO_DIR}
+
+DATA_DIR=${REPO_DIR}/${current_date}
+JOB_DIR=${DATA_DIR}/jobs
 
 # DATA_DIR=${SCRATCH_EXP_DIR}/${EXP_SLUG}
 # JOB_DIR=${SCRATCH_EXP_DIR}/${EXP_SLUG}/jobs
 # CONFIG_DIR=${HOME_EXP_DIR}/${EXP_SLUG}/hpc/config
 
-python3 gen-script.py --account ${ACCOUNT} --runs_per_subdir 500 --time_request ${JOB_TIME} --mem ${JOB_MEM} --replicates ${REPLICATES} --account ${ACCOUNT} --seed_offset ${SEED_OFFSET}
+python3 gen-script.py --runs_per_subdir 500 --time_request ${JOB_TIME} --mem ${JOB_MEM} --exec_dir ${EXEC_DIR} --data_dir ${DATA_DIR} --config_dir ${CONFIG_DIR} --repo_dir ${REPO_DIR} --replicates ${REPLICATES} --job_dir ${JOB_DIR} --account ${ACCOUNT} --seed_offset ${SEED_OFFSET}
