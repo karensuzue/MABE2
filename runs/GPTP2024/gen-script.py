@@ -15,9 +15,9 @@ import utilities as utils
 
 default_seed_offset = 0 # Corresponds to JOB_SEED_OFFSET
 default_account = "suzuekar"
-default_num_replicates = 100 # How many runs PER conditions
-default_job_time_request = "148:00:00" # TODO: Determine job time 
-default_job_mem_request = "8G" # TODO: Determine memory
+default_num_replicates = 1 # How many runs PER conditions
+default_job_time_request = "00:02:00" # TODO: Determine job time 
+default_job_mem_request = "2G" # TODO: Determine memory
 
 job_name = "aged_lexicase"
 executable = "MABE2"
@@ -44,14 +44,10 @@ base_script_filename = "./base-script.txt"
 combos = CombinationCollector()
 
 fixed_parameters = {
-    # "pop_size":"1000",
-    "num_gens":"2000000",
-    # "num_vals":"500",
-    "print_step":"1000000",
+    "num_gens":"1000000",
+    "print_step":"1000",
     "inject_step":"100",
-    # "inject_count":"100",
     "elite_count":"0",
-    # "diagnostic":"explore"
 }
 
 special_decorators = ["__DYNAMIC", "__COPY_OVER"]
@@ -200,11 +196,11 @@ def main():
         # Parameters not marked with "COPY_OVER" and "DYNAMIC"
         run_param_info = {key:condition_dict[key] for key in condition_dict if not any([dec in key for dec in special_decorators])}
         # Add fixed paramters
-        for param in fixed_parameters:
-            if param in run_param_info: continue
-            run_param_info[param] = fixed_parameters[param]
+        # for param in fixed_parameters:
+            # if param in run_param_info: continue
+            # run_param_info[param] = fixed_parameters[param]
         # Set random number seed
-        run_param_info["SEED"] = '${SEED}'
+        # run_param_info["SEED"] = '${SEED}'
 
         ###################################################################
         # Build commandline parameters string
@@ -215,8 +211,13 @@ def main():
         set_params = [f"--{field} {run_param_info[field]}" for field in fields]
         # Copy exactly strings from parameters marked with "COPY_OVER"
         copy_params = [condition_dict[key] for key in condition_dict if "__COPY_OVER" in key]
+
+        # Fixed parameters
+        fixed_fields = list(fixed_parameters.keys())
+        fixed_params = [f"-s {fixed_field}={fixed_parameters[fixed_field]}" for fixed_field in fixed_fields]
+
         # "--filename AgeControl.mabe -s num_vals=200...."
-        run_params = " ".join(set_params + copy_params)
+        run_params = " ".join(["-s random_seed=${SEED}"] + set_params + copy_params + fixed_params)
         ###################################################################
 
         # Add run commands to run the experiment
