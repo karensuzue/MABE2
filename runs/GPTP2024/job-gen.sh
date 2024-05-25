@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 REPLICATES=20
-ACCOUNT=suzuekar
+ACCOUNT=default
 SEED_OFFSET=10000
 # JOB_TIME=72:00:00
 # JOB_MEM=16G

@@ -14,7 +14,7 @@ sys.path.append(os.path.join(pathlib.Path(os.path.dirname(os.path.abspath(__file
 import utilities as utils
 
 default_seed_offset = 0 # Corresponds to JOB_SEED_OFFSET
-default_account = "suzuekar"
+default_account = "default"
 default_num_replicates = 1 # How many runs PER conditions
 default_job_time_request = "00:02:00" # TODO: Determine job time 
 default_job_mem_request = "2G" # TODO: Determine memory
