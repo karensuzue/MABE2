@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 REPLICATES=20
-ACCOUNT=default
+# ACCOUNT=default
+PARTITION=general-short
 SEED_OFFSET=10000
 # JOB_TIME=72:00:00
 # JOB_MEM=16G
@@ -21,4 +22,4 @@ EXEC_DIR=${REPO_DIR}
 DATA_DIR=${REPO_DIR}/${current_date}
 JOB_DIR=${DATA_DIR}/jobs
 
-python3 gen-script.py --runs_per_subdir 500 --time_request ${JOB_TIME} --mem ${JOB_MEM} --exec_dir ${EXEC_DIR} --data_dir ${DATA_DIR} --config_dir ${CONFIG_DIR} --repo_dir ${REPO_DIR} --replicates ${REPLICATES} --job_dir ${JOB_DIR} --account ${ACCOUNT} --seed_offset ${SEED_OFFSET}
+python3 gen-script.py --runs_per_subdir 500 --time_request ${JOB_TIME} --mem ${JOB_MEM} --exec_dir ${EXEC_DIR} --data_dir ${DATA_DIR} --config_dir ${CONFIG_DIR} --repo_dir ${REPO_DIR} --replicates ${REPLICATES} --job_dir ${JOB_DIR} --partition ${PARTITION} --seed_offset ${SEED_OFFSET}

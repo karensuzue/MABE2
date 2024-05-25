@@ -35,7 +35,7 @@
 #SBATCH --array=<<ARRAY_ID_RANGE>>          # Number of replicates, replace ARRAY_ID_RANGE with the range of array indices e.g. 0-99
 # you only need to specify resources required for a single task, not the entire array
 #SBATCH --mem=<<MEMORY_REQUEST>>            # memory required per node - amount of memory (in bytes)
-#SBATCH --account=<<ACCOUNT_NAME>>
+#SBATCH --partition=<<PARTITION_NAME>>
 
 #SBATCH --mail-type=END,FAIL                # Mail if jobs end, or fail
 #SBATCH --mail-user=suzuekar@msu.edu

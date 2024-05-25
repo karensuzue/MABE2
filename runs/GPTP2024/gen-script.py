@@ -14,7 +14,8 @@ sys.path.append(os.path.join(pathlib.Path(os.path.dirname(os.path.abspath(__file
 import utilities as utils
 
 default_seed_offset = 0 # Corresponds to JOB_SEED_OFFSET
-default_account = "default"
+# default_account = "default"
+default_partition = "general_short"
 default_num_replicates = 1 # How many runs PER conditions
 default_job_time_request = "00:02:00" # TODO: Determine job time 
 default_job_mem_request = "2G" # TODO: Determine memory
@@ -103,7 +104,8 @@ def main():
     parser.add_argument("--job_dir", type=str, default=None, help="Where to output these job files? If none, put in 'jobs' directory inside of the data_dir")
     parser.add_argument("--replicates", type=int, default=default_num_replicates, help="How many replicates should we run of each condition?")
     parser.add_argument("--seed_offset", type=int, default=default_seed_offset, help="Value to offset random number seeds by")
-    parser.add_argument("--account", type=str, default=default_account, help="Value to use for the slurm ACCOUNT")
+    # parser.add_argument("--account", type=str, default=default_account, help="Value to use for the slurm ACCOUNT")
+    parser.add_argument("--partition", type=str, default=default_partition, help="Value to use for the slurm ACCOUNT")
     parser.add_argument("--time_request", type=str, default=default_job_time_request, help="How long to request for each job on hpc?")
     parser.add_argument("--mem", type=str, default=default_job_mem_request, help="How much memory to request for each job?")
     parser.add_argument("--runs_per_subdir", type=int, default=-1, help="How many replicates to clump into job subdirectories")
@@ -116,7 +118,8 @@ def main():
     repo_dir = args.repo_dir
     exec_dir = args.exec_dir
     num_replicates = args.replicates
-    hpc_account = args.account
+    # hpc_account = args.account
+    hpc_partition = args.partition
     seed_offset = args.seed_offset
     job_time_request = args.time_request
     job_memory_request = args.mem
@@ -138,7 +141,8 @@ def main():
     print(f' - Config directory: {config_dir}')
     print(f' - Repository directory: {repo_dir}')
     print(f' - Replicates: {num_replicates}')
-    print(f' - Account: {hpc_account}')
+    # print(f' - Account: {hpc_account}')
+    print(f' - Parititon: {hpc_partition}')
     print(f' - Time Request: {job_time_request}')
     print(f' - Seed offset: {seed_offset}')
 
@@ -182,7 +186,7 @@ def main():
         file_str = file_str.replace("<<MEMORY_REQUEST>>", job_memory_request)
         file_str = file_str.replace("<<JOB_NAME>>", job_name)
         file_str = file_str.replace("<<JOB_SEED_OFFSET>>", str(cur_seed))
-        file_str = file_str.replace("<<ACCOUNT_NAME>>", hpc_account)
+        file_str = file_str.replace("<<PARTITION_NAME>>", hpc_partition)
 
         ###################################################################
         # Configure the run
