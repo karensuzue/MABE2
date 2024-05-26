@@ -6,7 +6,7 @@
 # GPTP2024 [CONFIG_DIR] [REPO_DIR]
 # ├── config_file1.mabe
 # ├── config_file2.mabe
-# MABE
+# ├── MABE
 # ├── ... (more .mabe files)
 # └── /YYYY_MM_DD_HH_MM [DATA_DIR]
 #     ├── jobs [JOB_DIR]
@@ -44,6 +44,9 @@
 
 ENV=<<ENV>> # Conda environment placeholder
 
+module purge
+module load GCC/11.2.0
+module load OpenMPI/4.1.1
 module load Conda/3
 conda activate ${ENV}
 
@@ -57,13 +60,13 @@ CONFIG_DIR=<<CONFIG_DIR>>
 REPO_DIR=<<REPO_DIR>>
 DATA_DIR=<<DATA_DIR>>
 
-RUN_DIR=<<RUN_DIR>>  # run dir is CONFIG_DIR or REPO_DIR / DATA_DIR/
+RUN_DIR=<<RUN_DIR>> 
 
 # Make new run folder
 mkdir -p ${RUN_DIR}
 cd ${RUN_DIR}
 
-# Copy .mabe files to run folder
+# Copy .mabe files and MABE executable to run folder
 cp ${CONFIG_DIR}/*.mabe . 
 cp ${EXEC_DIR}/${EXEC} .
 

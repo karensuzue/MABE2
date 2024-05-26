@@ -21,18 +21,9 @@ default_job_time_request = "00:02:00" # TODO: Determine job time
 default_job_mem_request = "2G" # TODO: Determine memory
 
 job_name = "aged_lexicase"
-executable = "MABE2"
+executable = "MABE"
 # exec_dir = home_dir
 env = "aged_lexicase" # Conda environment name
-
-# default_repo_dir = os.path.join(home_dir, datetime.now().strftime("%Y-%m-%d"))
-# default_data_dir = os.path.join(repo_dir, "data")
-
-# Path from RUN_DIR
-# config_dir = home_dir # Doesn't need to be created, it is the GPTP2024 folder
-
-# TODO: Are folders being created anywhere else?
-# os.makedirs(job_dir, exist_ok=True)
 
 base_script_filename = "./base-script.txt"
 
@@ -221,7 +212,7 @@ def main():
         fixed_params = [f"-s {fixed_field}={fixed_parameters[fixed_field]}" for fixed_field in fixed_fields]
 
         # "--filename AgeControl.mabe -s num_vals=200...."
-        run_params = " ".join(["-s random_seed=${SEED}"] + set_params + copy_params + fixed_params)
+        run_params = " ".join(set_params + ["-s random_seed=${SEED}"] + copy_params + fixed_params)
         ###################################################################
 
         # Add run commands to run the experiment
@@ -286,7 +277,7 @@ def main():
         print(f" - Active: " + ", ".join([f"RUN_C{cond_i}_{array_id_to_seed[array_id]}" for array_id in active_array_ids]))
         print(f" - Inactive: " + ", ".join([f"RUN_C{cond_i}_{array_id_to_seed[array_id]}" for array_id in inactive_array_ids]))
 
-        # Make folders
+        # Make "set" folders
         cur_job_dir = job_dir if args.runs_per_subdir == -1 else os.path.join(job_dir, f"set-{cur_run_subdir_id}")
         if len(active_array_ids): # If any of array ids are active
             utils.mkdir_p(cur_job_dir)

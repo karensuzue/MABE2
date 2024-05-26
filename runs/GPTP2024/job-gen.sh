@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-REPLICATES=20
+REPLICATES=1
 # ACCOUNT=default
 PARTITION=general-short
 SEED_OFFSET=10000
 # JOB_TIME=72:00:00
 # JOB_MEM=16G
-JOB_TIME=00:02:00
+JOB_TIME=00:15:00
 JOB_MEM=4G
 
 current_date=$(date +"%Y-%m-%d")
@@ -22,4 +22,14 @@ EXEC_DIR=${REPO_DIR}
 DATA_DIR=${REPO_DIR}/${current_date}
 JOB_DIR=${DATA_DIR}/jobs
 
+# Generate submission scripts in JOB_DIR
 python3 gen-script.py --runs_per_subdir 500 --time_request ${JOB_TIME} --mem ${JOB_MEM} --exec_dir ${EXEC_DIR} --data_dir ${DATA_DIR} --config_dir ${CONFIG_DIR} --repo_dir ${REPO_DIR} --replicates ${REPLICATES} --job_dir ${JOB_DIR} --partition ${PARTITION} --seed_offset ${SEED_OFFSET}
+
+# Make all generated submission scripts executable
+for set_dir in ${JOB_DIR}/set-*; do
+  for script in ${set_dir}/*.sh; do
+    chmod +x "$script"
+  done
+done
+
+chmod +x "MABE"
