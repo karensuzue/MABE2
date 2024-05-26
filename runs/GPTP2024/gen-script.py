@@ -183,6 +183,7 @@ def main():
         # Configure the run
         ###################################################################
         # Replace path to run directories
+        # new_path = os.path.join(data_dir, f'{filename_prefix}_'+'${SEED}')
         file_str = file_str.replace("<<RUN_DIR>>", \
             os.path.join(data_dir, f'{filename_prefix}_'+'${SEED}'))
             # Use same naming convention for RUN_DIR and script files
@@ -211,8 +212,9 @@ def main():
         fixed_fields = list(fixed_parameters.keys())
         fixed_params = [f"-s {fixed_field}={fixed_parameters[fixed_field]}" for fixed_field in fixed_fields]
 
+        other_params = ["-s random_seed=${SEED}", "-s fit_file.filename=${RUN_DIR}/run_${SLURM_ARRAY_TASK_ID}.csv"]
         # "--filename AgeControl.mabe -s num_vals=200...."
-        run_params = " ".join(set_params + ["-s random_seed=${SEED}"] + copy_params + fixed_params)
+        run_params = " ".join(set_params + other_params + copy_params + fixed_params)
         ###################################################################
 
         # Add run commands to run the experiment
