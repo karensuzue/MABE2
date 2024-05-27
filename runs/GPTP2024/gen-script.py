@@ -38,7 +38,7 @@ combos = CombinationCollector()
 fixed_parameters = {
     "num_gens":"1000000",
     "print_step":"1000",
-    "inject_step":"100",
+    "inject_step":"50000",
     "elite_count":"0",
 }
 
@@ -251,8 +251,8 @@ def main():
 
             # (1) Run experiment executable
             run_commands = ''
-            run_commands += 'echo "${EXEC} ${RUN_PARAMS}" > cmd.log\n'
-            run_commands += './${EXEC} ${RUN_PARAMS} > run.log\n'
+            run_commands += 'echo "${EXEC} ${RUN_PARAMS}" >> cmd.log\n'
+            run_commands += './${EXEC} ${RUN_PARAMS} > run-${SLURM_ARRAY_TASK_ID}.log\n'
 
             run_logic += run_commands
             # run_logic += analysis_commands

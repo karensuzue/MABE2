@@ -46,7 +46,7 @@ ENV=<<ENV>> # Conda environment placeholder
 
 module load Conda/3
 conda activate ${ENV}
-module load GCC/11.2.0
+module load GCCcore/13.1.0 
 module load OpenMPI/4.1.1
 
 JOB_SEED_OFFSET=<<JOB_SEED_OFFSET>>

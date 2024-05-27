@@ -6,8 +6,8 @@ PARTITION=general-short
 SEED_OFFSET=10000
 # JOB_TIME=72:00:00
 # JOB_MEM=16G
-JOB_TIME=00:15:00
-JOB_MEM=4G
+JOB_TIME=03:00:00
+JOB_MEM=6G
 
 current_date=$(date +"%Y-%m-%d")
 
@@ -25,11 +25,13 @@ JOB_DIR=${DATA_DIR}/jobs
 # Generate submission scripts in JOB_DIR
 python3 gen-script.py --runs_per_subdir 500 --time_request ${JOB_TIME} --mem ${JOB_MEM} --exec_dir ${EXEC_DIR} --data_dir ${DATA_DIR} --config_dir ${CONFIG_DIR} --repo_dir ${REPO_DIR} --replicates ${REPLICATES} --job_dir ${JOB_DIR} --partition ${PARTITION} --seed_offset ${SEED_OFFSET}
 
-# Make all generated submission scripts executable
+# Make sure MABE is executable 
+chmod +x "MABE"
+
+# Make all generated submission scripts executable, sbatch
 for set_dir in ${JOB_DIR}/set-*; do
   for script in ${set_dir}/*.sh; do
     chmod +x "$script"
+    sbatch "$script"
   done
 done
-
-chmod +x "MABE"
