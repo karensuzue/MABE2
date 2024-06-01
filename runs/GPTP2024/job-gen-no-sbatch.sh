@@ -1,19 +1,24 @@
 #!/usr/bin/env bash
 
+# This script generates submission scripts
+
 REPLICATES=20
 # ACCOUNT=default
 PARTITION=general-short
 SEED_OFFSET=10000
-JOB_TIME=24:00:00
+JOB_TIME=3:50:00
 JOB_MEM=16G
 
 current_date=$(date +"%Y-%m-%d")
+
+# You might want to copy things over to scratch to run
 
 REPO_DIR=/mnt/home/suzuekar/MABE2/runs/GPTP2024
 CONFIG_DIR=${REPO_DIR}
 EXEC_DIR=${REPO_DIR}
 
-DATA_DIR=${REPO_DIR}/${current_date}
+SCRATCH_DIR=/mnt/scratch/suzuekar/GPTP2024
+DATA_DIR=${SCRATCH_DIR}/${current_date}
 JOB_DIR=${DATA_DIR}/jobs
 
 # Generate submission scripts in JOB_DIR

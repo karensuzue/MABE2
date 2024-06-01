@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# DON'T USE THIS 
+
 REPLICATES=20
 # ACCOUNT=default
 PARTITION=general-short
