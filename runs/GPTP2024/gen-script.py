@@ -17,8 +17,8 @@ default_seed_offset = 0 # Corresponds to JOB_SEED_OFFSET
 # default_account = "default"
 default_partition = "general_short"
 default_num_replicates = 1 # How many runs PER conditions
-default_job_time_request = "00:02:00" # TODO: Determine job time 
-default_job_mem_request = "2G" # TODO: Determine memory
+default_job_time_request = "03:50:00" 
+default_job_mem_request = "16G" 
 
 job_name = "aged_lexicase"
 executable = "MABE"
@@ -134,7 +134,7 @@ def main():
     print(f' - Replicates: {num_replicates}')
     # print(f' - Account: {hpc_account}')
     print(f' - Parititon: {hpc_partition}')
-    print(f' - Time Request: {job_time_request}')
+    # print(f' - Time Request: {job_time_request}') TODO: Make job time request vary between population sizes etc
     print(f' - Seed offset: {seed_offset}')
 
     # If no job_dir provided, default to data_dir/jobs
@@ -162,6 +162,15 @@ def main():
         # e.g: C1_AgeControl_explore_200_10000_500
         filename_prefix = f'C{cond_i}_{filename}_{diagnostic_name}_{cardinality}_{pop_size}_{inject_size}'
         # TODO: Find a better naming convention for RUN_DIR and job scripts
+
+        # Adjust job request time
+        if diagnostic_name == "explore" or diagnostic_name == "exploit":
+            if pop_size == "1000":
+                job_time_request = "08:00:00"
+        elif diagnostic_name == "diversity":
+            job_time_request = "08:00:00"
+        else:
+            job_time_request = "03:50:00"
 
         # Replace base script
         file_str = base_sub_script
