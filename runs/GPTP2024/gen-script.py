@@ -260,9 +260,9 @@ def main():
             # (1) Run experiment executable
             run_commands = ''
             run_commands += 'echo "${EXEC} ${RUN_PARAMS}" > cmd.log\n'
-            run_commands += './${EXEC} ${RUN_PARAMS} > run-${SLURM_ARRAY_TASK_ID}.log\n'
             run_commands += '${SLURM_JOB_ID} > slurm.log\n'
             run_commands += '${SLURM_ARRAY_TASK_ID} >> slurm.log\n'
+            run_commands += './${EXEC} ${RUN_PARAMS} > run-${SLURM_ARRAY_TASK_ID}.log\n'
 
             run_logic += run_commands
             # run_logic += analysis_commands
