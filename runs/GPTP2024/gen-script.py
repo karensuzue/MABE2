@@ -153,7 +153,7 @@ def main():
 
         # Retrieve info from current problem
         filename = condition_dict["filename"][:-5] # removes ".mabe" extension
-        diagnostic_name = condition_dict["diagnostic__COPY_OVER"].split('=')[-1].strip("\\\"") # exploit, explore, diversity
+        diagnostic_name = condition_dict["diagnostic__COPY_OVER"].split('=')[-1].strip("\\\"") # exploit, explore, or diversity
         cardinality = condition_dict["num_vals__COPY_OVER"].split('=')[-1]
         pop_size = condition_dict["pop_inject_ratio__COPY_OVER"].split()[1].split('=')[-1]
         inject_size = condition_dict["pop_inject_ratio__COPY_OVER"].split()[3].split('=')[-1]
@@ -210,11 +210,16 @@ def main():
 
         # Fixed parameters
         fixed_fields = list(fixed_parameters.keys())
+        # If exploit diagnostic, set to 100k generations instead of 1mil
+        if diagnostic_name == 'exploit':
+            fixed_parameters["num_gens"] = "100000"
         fixed_params = [f"-s {fixed_field}={fixed_parameters[fixed_field]}" for fixed_field in fixed_fields]
 
         other_params = ["-s random_seed=${SEED}", "-s fit_file.filename=\\\"${RUN_DIR}/run_${SLURM_ARRAY_TASK_ID}.csv\\\""]
+        
         # "--filename AgeControl.mabe -s num_vals=200...."
         run_params = " ".join(set_params + other_params + copy_params + fixed_params)
+
         ###################################################################
 
         # Add run commands to run the experiment
