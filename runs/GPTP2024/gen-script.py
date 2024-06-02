@@ -211,8 +211,11 @@ def main():
         # Fixed parameters
         fixed_fields = list(fixed_parameters.keys())
         # If exploit diagnostic, set to 100k generations instead of 1mil
+        # TODO: There might be a better way to do this
         if diagnostic_name == 'exploit':
             fixed_parameters["num_gens"] = "100000"
+        else: # Ensure that fixed_parameters["num_gens"] isn't permanently changed
+            fixed_parameters["num_gens"] = "1000000"
         fixed_params = [f"-s {fixed_field}={fixed_parameters[fixed_field]}" for fixed_field in fixed_fields]
 
         other_params = ["-s random_seed=${SEED}", "-s fit_file.filename=\\\"${RUN_DIR}/run_${SLURM_ARRAY_TASK_ID}.csv\\\""]
