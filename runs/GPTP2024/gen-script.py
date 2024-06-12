@@ -95,7 +95,7 @@ def main():
     parser.add_argument("--job_dir", type=str, default=None, help="Where to output these job files? If none, put in 'jobs' directory inside of the data_dir")
     parser.add_argument("--replicates", type=int, default=default_num_replicates, help="How many replicates should we run of each condition?")
     parser.add_argument("--seed_offset", type=int, default=default_seed_offset, help="Value to offset random number seeds by")
-    # parser.add_argument("--account", type=str, default=default_account, help="Value to use for the slurm ACCOUNT")
+    parser.add_argument("--account", type=str, default=default_account, help="Value to use for the slurm ACCOUNT")
     parser.add_argument("--partition", type=str, default=default_partition, help="Value to use for the slurm ACCOUNT")
     parser.add_argument("--time_request", type=str, default=default_job_time_request, help="How long to request for each job on hpc?")
     parser.add_argument("--mem", type=str, default=default_job_mem_request, help="How much memory to request for each job?")
@@ -134,7 +134,7 @@ def main():
     print(f' - Replicates: {num_replicates}')
     # print(f' - Account: {hpc_account}')
     print(f' - Parititon: {hpc_partition}')
-    # print(f' - Time Request: {job_time_request}') TODO: Make job time request vary between population sizes etc
+    print(f' - Time Request: {job_time_request}') # TODO: Make job time request vary between population sizes etc
     print(f' - Seed offset: {seed_offset}')
 
     # If no job_dir provided, default to data_dir/jobs
@@ -164,13 +164,18 @@ def main():
         # TODO: Find a better naming convention for RUN_DIR and job scripts
 
         # Adjust job request time
-        if diagnostic_name == "explore" or diagnostic_name == "exploit":
-            if pop_size == "1000":
-                job_time_request = "08:00:00"
-        elif diagnostic_name == "diversity":
-            job_time_request = "08:00:00"
-        else:
-            job_time_request = "03:50:00"
+        # if diagnostic_name == "explore" or diagnostic_name == "exploit":
+        #     if pop_size == "1000":
+        #         job_time_request = "08:00:00"
+        #     else:
+        #         job_time_request = "03:50:00"
+        # elif diagnostic_name == "diversity":
+        #     if pop_size == "1000":
+        #         job_time_request = "16:00:00"            
+        #     else:
+        #         job_time_request = "08:00:00"
+        # else:
+        #     job_time_request = "03:50:00"
 
         # Replace base script
         file_str = base_sub_script
