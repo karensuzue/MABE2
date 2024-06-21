@@ -22,13 +22,12 @@ def parse_conditions(dir_path):
     array_id = int(conditions[-1]) - SEED_OFFSET - int(condition_id)*20 + 1
     return (conditions, array_id)
 
-def aggregate_data(condition_folders, output_file):
-    # Takes in a list of paths from the same condition and a path to the output file
+def aggregate_data(condition_folders, avg_file, compile_file):
+    # Takes in a list of paths from the same condition and paths to an average and compiled output file
     # Averages all replicates from the same condition
 
     aggregated_data = None
 
-    # loop through list of condition folders
     for folder in condition_folders:
         conditions, array_id = parse_conditions(folder)
 
@@ -47,31 +46,41 @@ def aggregate_data(condition_folders, output_file):
             else:
                 aggregated_data += run_data              
             
+            if os.path.exists(compile_file):
+                # Append run data to A single compile file
+                run_data.to_csv(compile_file, mode="a")
+            else:
+                run_data.to_csv(compile_file)
+
         else:
             print(f"Run file {run_file} not found.")     
-        
+    
+    # Write averaged data 
     if aggregated_data is not None:
         aggregated_data /= len(condition_folders)
-        aggregated_data.to_csv(output_file)
+        aggregated_data.to_csv(avg_file)
 
 
 def main():
-    # TODO: For now, average across all conditions
-
     # Directory holding all run folders
     data_dir = os.path.join("/mnt/scratch/suzuekar/GPTP2024/", SET)
 
-    # Output folder for aggregated data
-    output_dir = os.path.join(data_dir, "compile")
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+    # Directory for compiled data
+    compile_dir = os.path.join(data_dir, "compile")
+    if not os.path.exists(compile_dir):
+        os.makedirs(compile_dir)
+    
+    # Directory for average data
+    avg_dir = os.path.join(data_dir, "average")
+    if not os.path.exists(avg_dir):
+        os.makedirs(avg_dir)
 
     condition_folders = [os.path.join(data_dir, entry) for entry in sorted(os.listdir(data_dir))
                          if os.path.isdir(os.path.join(data_dir, entry))
-                         and entry not in ["jobs", "compile"]]
-
+                         and entry not in ["jobs", "compile", "average"]]
+    
     # Group condition folders by experimental configuration
-    condition_groups = {} # {"conditions", [folders]}
+    condition_groups = {} # {"conditions_str": [folders]}
     for folder in condition_folders:
         conditions, array_id = parse_conditions(folder)
         conditions_str = "_".join(conditions[:-1])
@@ -80,8 +89,9 @@ def main():
         condition_groups[conditions_str].append(folder)
 
     for cond, folders in condition_groups.items():
-        output_file = os.path.join(output_dir, f"{cond}.csv")
-        aggregate_data(folders, output_file)    
+        avg_file = os.path.join(avg_dir, f"{cond}.csv")
+        compile_file = os.path.join(compile_dir, f"{cond}.csv")
+        aggregate_data(folders, avg_file, compile_file)    
 
 
 if __name__ == "__main__":
