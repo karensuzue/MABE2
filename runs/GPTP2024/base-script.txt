@@ -44,6 +44,7 @@
 
 ENV=<<ENV>> # Conda environment placeholder
 
+module purge
 module load Conda/3
 conda activate ${ENV}
 module load GCCcore/13.1.0 
