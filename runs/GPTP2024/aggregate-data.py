@@ -36,21 +36,25 @@ def aggregate_data(condition_folders, avg_file, compile_file):
 
         if os.path.exists(run_file):
             run_data = pd.read_csv(run_file)
-            # Add "Generation" column
-            run_data['Generations'] = [(i*1000 + 1000) for i in range(len(run_data))]
-            # Add "Replicate" column
-            run_data['Replicate'] = [array_id for i in range(len(run_data))]
 
             if aggregated_data is None:
                 aggregated_data = run_data
             else:
                 aggregated_data += run_data              
             
+            # Add "Generation" column
+            run_data['Generations'] = [(i*1000 + 1000) for i in range(len(run_data))]
+            # Add "Replicate" column
+            run_data['Replicate'] = [array_id for i in range(len(run_data))]
+
             if os.path.exists(compile_file):
                 # Append run data to A single compile file
                 run_data.to_csv(compile_file, mode="a")
             else:
                 run_data.to_csv(compile_file)
+            
+            # Remove "Generations" and "Replicate" columns from run_data
+            run_data.drop(columns=['Generations', 'Replicate'], inplace=True)
 
         else:
             print(f"Run file {run_file} not found.")     
