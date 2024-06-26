@@ -1,17 +1,15 @@
 '''
-Compile and aggregate (average) data
+Compile and average data
 '''
 
 import os
 import pandas as pd
 import numpy as np
-from datetime import datetime
 
 SEED_OFFSET = 10000
 REPLICATES = 20
 SET = "0"
 
-# Isolate and return conditions from directory path 
 def parse_conditions(dir_path):
     # Example of a directory name: /mnt/.../C0_AgeControl_explore_200_500_50_10000
     # First term is condition/treatment ID
@@ -22,12 +20,14 @@ def parse_conditions(dir_path):
     array_id = int(conditions[-1]) - SEED_OFFSET - int(condition_id)*20 + 1
     return (conditions, array_id)
 
+
 def aggregate_data(condition_folders, avg_file, compile_file):
-    # Takes in a list of paths from the same condition and paths to an average and compiled output file
-    # Averages all replicates from the same condition
+    # Takes in a list of replicate folders with the same condition and paths to an average and compiled output file
+    # Averages and compiles all replicates from the same condition
 
     aggregated_data = None
 
+    # Iterate through replicates of the same condition
     for folder in condition_folders:
         conditions, array_id = parse_conditions(folder)
 
@@ -79,6 +79,7 @@ def main():
     if not os.path.exists(avg_dir):
         os.makedirs(avg_dir)
 
+    # Paths for condition folders
     condition_folders = [os.path.join(data_dir, entry) for entry in sorted(os.listdir(data_dir))
                          if os.path.isdir(os.path.join(data_dir, entry))
                          and entry not in ["jobs", "compile", "average"]]
