@@ -53,8 +53,11 @@ combos.register_var("num_vals__COPY_OVER")
 combos.add_val(
     "filename",
     [
-        "AgeControl.mabe",
-        "AgeDiagnostics.mabe"
+        # "AgeControl.mabe",
+        # "AgeDiagnostics.mabe"
+        "AgeControl-No-Inject.mabe"
+        "AgeControl-No-Replace.mabe"
+        "AgeDiagnostics-No-Replace.mabe"
     ]
 )
 
@@ -62,7 +65,7 @@ combos.add_val(
     "diagnostic__COPY_OVER",
     [
         "-s diagnostics.diagnostic=\\\"explore\\\"",
-        "-s diagnostics.diagnostic=\\\"exploit\\\"",
+        # "-s diagnostics.diagnostic=\\\"exploit\\\"",
         "-s diagnostics.diagnostic=\\\"diversity\\\""
     ]
 )
