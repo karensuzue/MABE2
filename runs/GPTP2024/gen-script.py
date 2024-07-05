@@ -55,8 +55,8 @@ combos.add_val(
     [
         # "AgeControl.mabe",
         # "AgeDiagnostics.mabe"
-        "AgeControl-No-Inject.mabe"
-        "AgeControl-No-Replace.mabe"
+        "AgeControl-No-Inject.mabe",
+        "AgeControl-No-Replace.mabe",
         "AgeDiagnostics-No-Replace.mabe"
     ]
 )
@@ -69,6 +69,7 @@ combos.add_val(
         "-s diagnostics.diagnostic=\\\"diversity\\\""
     ]
 )
+
 combos.add_val(
     "pop_inject_ratio__COPY_OVER",
     [

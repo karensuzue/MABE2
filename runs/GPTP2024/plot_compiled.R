@@ -4,7 +4,7 @@ library(ggplot2)
 library(dplyr)
 library(tidyr)
 
-setwd("C:/Users/HP/Documents/compile")
+setwd("C:/Users/HP/Documents/Education/Research/GPTP2024/runs2/compile")
 
 generate_plot <- function(file_name, metric_name) {
   og_data <- read.csv(file_name, header=TRUE)

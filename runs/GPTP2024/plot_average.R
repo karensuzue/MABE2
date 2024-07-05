@@ -4,7 +4,7 @@ library(ggplot2)
 library(dplyr)
 library(rlang)
 
-setwd("C:/Users/HP/Documents/average")
+setwd("C:/Users/HP/Documents/Education/Research/GPTP2024/runs2/average")
 
 # TODO: turn this into a function, iterate through all CSV files to generate plots
 
